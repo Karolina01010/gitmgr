@@ -68,5 +68,7 @@ arcpy.Delete_management('Park_A_AAK120')
 arcpy.Delete_management('Stadion_amf_AAK160')
 arcpy.Delete_management('Stadion_amf_PAK160')
 
-
-
+arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\symbole\Budynek_P.lyr')
+marginalnia_A = "D:\mgr\Gitmgr\mgr\marginalia\L_Area.shp"
+marginalnia_P = "D:\mgr\Gitmgr\mgr\marginalia\L_Point.shp"
+marginalnia_L = "D:\mgr\Gitmgr\mgr\marginalia\L_Line.shp"
