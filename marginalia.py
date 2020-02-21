@@ -1,16 +1,27 @@
 import os
 import arcpy
-mxdd ="D:\mgr\MGR.mxd"
-dane_wyjsc = "D:\mgr\Baza100.gdb"
-for dane_wyjsc in cursor:
-    mxd = arcpy.mapping.MapDocument(mxdd)
 
-arcpy.env.workspace = "D:\mgr\Baza100.gdb"
-marginalnia_A = "D:\mgr\Gitmgr\mgr\marginalia\L_Area.shp"
-marginalnia_P = "D:\mgr\Gitmgr\mgr\marginalia\L_Point.shp"
-marginalnia_L = "D:\mgr\Gitmgr\mgr\marginalia\L_Line.shp"
+#myMap ="D:\mgr\MGR.mxd"
+mxd = arcpy.mapping.MapDocument(r"D:\mgr\mxdd.mxd") # dzia?anie na otwartym pliku mxd ("CURRENT")
+df = arcpy.mapping.ListDataFrames(mxd)[0]
+df.scale = 50000
 
-arcpy.MakeFeatureLayer_management('Budynek_P_PAL015', r'D:\mgr\symbole\Budynek_P.lyr')
+addLayer = arcpy.mapping.Layer(r"D:\mgr\symbole\Budynek_P.lyr")
+arcpy.mapping.AddLayer(df, addLayer)
+mxd.saveACopy(r"D:\mgr\FINALPROJECT.mxd")
+
+
+#arcpy.mapping.AddLayer(
+
+#arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\symbole\Budynek_P.lyr')
+#arcpy.ApplySymbologyFromLayer_management("Budynek_A",r'D:\mgr\symbole\Budynek_A.lyr')
+
+
+#lyrGr = arcpy.mapping.Layer("D:\mgr\symbole\Budynek_P.lyr")
+#newlyrGr = arcpy.mapping.ListLayers(df)[0]
+
+
+
 
 
 
