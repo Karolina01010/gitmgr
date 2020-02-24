@@ -93,7 +93,7 @@ arcpy.SelectLayerByAttribute_management('Rzeka_strum_L_layer', "NEW_SELECTION", 
 arcpy.SelectLayerByAttribute_management('Rzeka_strum_L_layer', "ADD_TO_SELECTION",' "Shape_Length" > 500 ')
 arcpy.SelectLayerByAttribute_management('Rzeka_strum_L_layer', "ADD_TO_SELECTION", '"HAT" = \'      501\' ')
 
-
+#7
 #Zapisuje wyselekcjonowanie elementy do bazy100
 
 arcpy.FeatureClassToFeatureClass_conversion('Budynek_P_layer', dane_wyjsc, 'Budynek_P')
@@ -104,7 +104,7 @@ arcpy.FeatureClassToFeatureClass_conversion('Mur_ogrodze_L_layer', dane_wyjsc, '
 arcpy.FeatureClassToFeatureClass_conversion('Park_A_layer', dane_wyjsc, 'Park_A')
 arcpy.FeatureClassToFeatureClass_conversion('Zaklad_prze_A_layer', dane_wyjsc, 'Zaklad_prze_A')
 arcpy.FeatureClassToFeatureClass_conversion('Zaklad_prze_P_layer', dane_wyjsc, 'Zaklad_prze_P')
-arcpy.FeatureClassToFeatureClass_conversion('Drzewo_P_layer', dane_wyjsc, 'Drzewo_P_P')
+arcpy.FeatureClassToFeatureClass_conversion('Drzewo_P_layer', dane_wyjsc, 'Drzewo_P')
 arcpy.FeatureClassToFeatureClass_conversion('Kanal_row_L_layer', dane_wyjsc, 'Kanal_row_L')
 arcpy.FeatureClassToFeatureClass_conversion('Rzeka_strum_L_layer', dane_wyjsc, 'Rzeka_strum_L')
 arcpy.FeatureClassToFeatureClass_conversion('Droga_polna_L_layer', dane_wyjsc, 'Droga_polna_L')
@@ -116,6 +116,7 @@ arcpy.FeatureClassToFeatureClass_conversion('Teren_zabud_A_layer', dane_wyjsc, '
 arcpy.FeatureClassToFeatureClass_conversion('Roslinnosc_A_layer', dane_wyjsc, 'Roslinnosc_A')
 arcpy.FeatureClassToFeatureClass_conversion('Rezerwat_pr_A_layer', dane_wyjsc, 'Rezerwat_pr_A')
 
+#8
 #Usuwa nie ?ywane warstwy wejsciowe
 arcpy.Delete_management('Budynek_P_PAL015')
 arcpy.Delete_management('Budynek_A_AAL015')
@@ -137,8 +138,12 @@ arcpy.Delete_management('Teren_zabud_AAL020')
 arcpy.Delete_management('Roslinnosc_AEB010')
 arcpy.Delete_management('Rezerwat_pr_AAL005')
 
+#9
+#Selekcja obiektow do stowrzenia nowych klas
 
-
+arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'27\' ')
+arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_kol_P")
+arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "CLEAR_SELECTION", '"BFC" = \'27\' ')
 
 arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\symbole\Budynek_P.lyr')
 
