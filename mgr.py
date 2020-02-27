@@ -143,6 +143,18 @@ arcpy.Delete_management('Rezerwat_pr_AAL005')
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'27\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_kol_P")
+arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'50\' ')
+arcpy.CopyFeatures_management('Budynek_P_layer',"Kosciol_swiatynia_P")
+arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'54\' ')
+arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_benz_P")
+arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'601\' ')
+arcpy.CopyFeatures_management('Budynek_P_layer',"Przystanek")
+arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'7\' ')
+arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"BFC" = \'7\' ')
+arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
+
+
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "CLEAR_SELECTION", '"BFC" = \'27\' ')
 
 arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\symbole\Budynek_P.lyr')
