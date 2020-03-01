@@ -70,8 +70,10 @@ arcpy.FeatureToPoint_management('Zaklad_prze_A_layer', 'Zaklad_prze_P_layer')
 arcpy.SelectLayerByAttribute_management('Las_A_layer', "NEW_SELECTION",' "Shape_Area" < 10000 ')
 arcpy.FeatureToPoint_management('Las_A_layer', 'Drzewo_P_layer')
 
-arcpy.SelectLayerByAttribute_management('Sad_plantac_A_layer', "NEW_SELECTION",' "Shape_Area" < 100000 ')
+arcpy.SelectLayerByAttribute_management('Sad_plantac_A_layer', "ADD_TO_SELECTION",' "Shape_Area" < 110000 ')
 arcpy.FeatureToPoint_management('Sad_plantac_A_layer', 'Drzewo_P_layer')
+
+arcpy.FeatureClassToFeatureClass_conversion('Drzewo_P_layer', dane_wyjsc, 'Drzewo_P')
 
 #6
 #Selekcja po atrybutach
@@ -96,7 +98,7 @@ arcpy.SelectLayerByAttribute_management('Rzeka_strum_L_layer', "ADD_TO_SELECTION
 #7
 #Zapisuje wyselekcjonowanie elementy do bazy100
 
-arcpy.FeatureClassToFeatureClass_conversion('Budynek_P_layer', dane_wyjsc, 'Budynek_P')
+
 arcpy.FeatureClassToFeatureClass_conversion('Budynek_A_layer', dane_wyjsc, 'Budynek_A')
 arcpy.FeatureClassToFeatureClass_conversion('Magazyn_skl_A_layer', dane_wyjsc, 'Magazyn_skl_A')
 arcpy.FeatureClassToFeatureClass_conversion('Ogrodzenie_L_layer', dane_wyjsc, 'Ogrodzenie_L')
@@ -104,7 +106,8 @@ arcpy.FeatureClassToFeatureClass_conversion('Mur_ogrodze_L_layer', dane_wyjsc, '
 arcpy.FeatureClassToFeatureClass_conversion('Park_A_layer', dane_wyjsc, 'Park_A')
 arcpy.FeatureClassToFeatureClass_conversion('Zaklad_prze_A_layer', dane_wyjsc, 'Zaklad_prze_A')
 arcpy.FeatureClassToFeatureClass_conversion('Zaklad_prze_P_layer', dane_wyjsc, 'Zaklad_prze_P')
-arcpy.FeatureClassToFeatureClass_conversion('Drzewo_P_layer', dane_wyjsc, 'Drzewo_P')
+
+
 arcpy.FeatureClassToFeatureClass_conversion('Kanal_row_L_layer', dane_wyjsc, 'Kanal_row_L')
 arcpy.FeatureClassToFeatureClass_conversion('Rzeka_strum_L_layer', dane_wyjsc, 'Rzeka_strum_L')
 arcpy.FeatureClassToFeatureClass_conversion('Droga_polna_L_layer', dane_wyjsc, 'Droga_polna_L')
@@ -143,19 +146,37 @@ arcpy.Delete_management('Rezerwat_pr_AAL005')
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'27\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_kol_P")
+arcpy.DeleteFeatures_management('Budynek_P_layer') # Je?li w pliku warstwy jest aktywny wyb?r, usunie tylko wybrane rekordy.
+
+
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'50\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Kosciol_swiatynia_P")
+arcpy.DeleteFeatures_management('Budynek_P_layer')
+
+
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'54\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_benz_P")
+arcpy.DeleteFeatures_management('Budynek_P_layer')
+
+
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'601\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Przystanek")
+arcpy.DeleteFeatures_management('Budynek_P_layer')
+
+
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'7\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
+arcpy.DeleteFeatures_management('Budynek_P_layer')
+
+
 arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"BFC" = \'7\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
+arcpy.DeleteFeatures_management('Budynek_P_layer')
+
+arcpy.FeatureClassToFeatureClass_conversion('Budynek_P_layer', dane_wyjsc, 'Budynek_P')
 
 
-arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "CLEAR_SELECTION", '"BFC" = \'27\' ')
 
-arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\symbole\Budynek_P.lyr')
+arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr')
+
 
