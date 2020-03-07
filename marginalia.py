@@ -5,6 +5,13 @@ import arcpy
 mxd = arcpy.mapping.MapDocument(r"D:\mgr\mxdd.mxd") # dzia?anie na otwartym pliku mxd ("CURRENT")
 workspace = r"D:\mgr\Baza100.gdb"                    # definiujemy ta baze
 
+walk = arcpy.da.Walk(workspace, datatype="Layer")
+for dirpath, dirnames, filenames in walk:
+    for filename in filenames:
+        arcpy.mapping.AddLayer(os.path.join(dirpath, filename))
+
+
+
 df = arcpy.mapping.ListDataFrames(mxd, "*")[0]
 walk = arcpy.da.Walk(workspace, datatype = "Layer")
 for dirpath, dirnames, filenames in walk:
@@ -20,7 +27,7 @@ for fds in arcpy.ListDatasets('','feature') + ['']:
 return fcs
 
 #addLayer = arcpy.mapping.Layer(r"D:\mgr\Baza100.gdb\Rzeka_strum_L")
-
+#addLayer = arcpy.mapping.Layer(r"D:\mgr\Baza100.gdb\Rzeka_strum_L")
 
 #arcpy.mapping.AddLayer(df,Layer)
 
@@ -39,7 +46,16 @@ return fcs
 #lyrGr = arcpy.mapping.Layer("D:\mgr\symbole\Budynek_P.lyr")
 #newlyrGr = arcpy.mapping.ListLayers(df)[0]
 
+mxd = arcpy.mapping.MapDocument("CURRENT")
 
+# Hook into the data frame where you want to add the layer
+df  = arcpy.mapping.ListDataFrames(mxd)[0]
+
+# Create a Layer object
+lyr = arcpy.management.MakeFeatureLayer(r"Path\To\GDB\FeatureClass", "NameForLayer").getOutput(0)
+
+# Add the layer object to the map
+arcpy.mapping.AddLayer(df, lyr)
 
 
 
