@@ -21,3 +21,21 @@ mxd.save()
 
 
 
+import arcpy
+
+fc = arcpy.mapping.Layer('D:\mgr\Baza100.gdb/Rzeka_strum_L')
+
+with arcpy.da.UpdateCursor(fc,["SHAPE@"]) as cursor:
+    for row in cursor:
+        #loop through parts
+        for part in row[0]:
+            count = 0
+            # loop through verticies
+            for pnt in part:
+                count = count + 1
+                if count >= 3:
+                    arr = row[0].getPart(0)
+                    arr.remove(1)
+                    newLine = arcpy.Polyline(arr)
+                    row[0] = newLine
+                    cursor.updateRow(row)
