@@ -16,12 +16,18 @@ for dirpath, dirnames, filenames in walk:
 mxd.save()
 
 arcpy.ApplySymbologyFromLayer_management("Rzeka_strum_L",r'D:\mgr\Gitmgr\mgr\symbole\Rzeka_L.lyr')
+arcpy.ApplySymbologyFromLayer_management("Budynek_P_layer","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
 
 mxd.save()
 
+# FILTRACJA
+
+#arcpy.Buffer_analysis("Budnek_P", "buffer",80)
+
+#arcpy.cartography.SimplifyLine("rzeka","rzeka1","POINT_REMOVE",10)
 
 
-import arcpy
+
 
 fc = arcpy.mapping.Layer('D:\mgr\Baza100.gdb/Rzeka_strum_L')
 

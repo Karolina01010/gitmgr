@@ -34,6 +34,9 @@ arcpy.FeatureClassToGeodatabase_conversion(inFeatures, outLocation)
 #4
 # Tworzy warstwe obiektow
 arcpy.MakeFeatureLayer_management('Budynek_P_PAL015', 'Budynek_P_layer')
+arcpy.CalculateField_management('Budynek_P_layer',"GMRotation",'!RCD!',"PYTHON") # oclicza w kat obrotu punktu (string ->double)
+
+
 arcpy.MakeFeatureLayer_management('Budynek_A_AAL015', 'Budynek_A_layer')
 arcpy.MakeFeatureLayer_management('Magazyn_skl_AAM010', 'Magazyn_skl_A_layer')
 arcpy.MakeFeatureLayer_management('Ogrodzenie_LAL070', 'Ogrodzenie_L_layer')
