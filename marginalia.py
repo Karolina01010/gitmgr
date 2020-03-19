@@ -26,55 +26,10 @@ mxd.save()
 
 #arcpy.cartography.SimplifyLine("rzeka","rzeka1","POINT_REMOVE",10)
 
-
-
-
-fc = arcpy.mapping.Layer('D:\mgr\mgr.gdb\bud')
-
-for i in range (1,next):
-    Objid = "s" +str(1)
-
-
-with arcpy.da.UpdateCursor(fc,["NEAR_FID"]) as cursor:
-    for row in cursor:
-        #loop through parts
-        for part in row[0]:
-            count = 0
-            # loop through verticies
-            for pnt in part:
-                count = count + 1
-                if count >= 3:
-                    arr = row[0].getPart(0)
-                    arr.remove(1)
-                    newLine = arcpy.Polyline(arr)
-                    row[0] = newLine
-                    cursor.updateRow(row)
-
-#arcpy.PointDistance_analysis("bud","bud","dystans",80)
-import os
-import arcpy
-
-in_fc = r"D:\mgr\mgr.gdb\Export_Output_4"
-nearest_dict = dict()
-with arcpy.da.UpdateCursor(in_fc, ["OID@", "NEAR_FID"]) as rows:
-    for row in rows:
-        if row[1] <= 40:
-
-            cursor.deleteRow(row[1])
-            reset(row)
-        else:
-            # if the key does not exist then create a new list with near id
-            # and add it to the dictionary
-            nearest_dict[input_id] = [nearest_id]
-
-print(nearest_dict)
-
-import arcpy, sys
-
 feature = r"D:\mgr\mgr.gdb\bud"
 
 def nearRoutine():
-    #calculate the distances using the current dataset
+    #coblicza odleglosc
     arcpy.Near_analysis(feature, feature)
 
     # powtarza dla wszystkich funkcji, kt?re znajduj? si? w odleg?o?ci 40
