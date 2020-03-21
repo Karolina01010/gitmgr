@@ -149,37 +149,59 @@ arcpy.Delete_management('Rezerwat_pr_AAL005')
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'27\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_kol_P")
-arcpy.DeleteFeatures_management('Budynek_P_layer') # Je?li w pliku warstwy jest aktywny wyb?r, usunie tylko wybrane rekordy.
 
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'50\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Kosciol_swiatynia_P")
-arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'54\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_benz_P")
-arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'601\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Przystanek")
-arcpy.DeleteFeatures_management('Budynek_P_layer')
+
 
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'7\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
-arcpy.DeleteFeatures_management('Budynek_P_layer')
-
-
-arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"BFC" = \'7\' ')
-arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
-arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 arcpy.FeatureClassToFeatureClass_conversion('Budynek_P_layer', dane_wyjsc, 'Budynek_P')
 
 
+# Podzia? drogi na klasy
 
-arcpy.ApplySymbologyFromLayer_management("Budynek_P",r'D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr')
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"TUC"=\'2\' AND "RTT"=\'16\'')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_101")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"RTT"=\'501\' AND "TUC"<>\'501\'')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_103")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"RTT"<>\'16\' AND "RTT"<>\'501\' AND "RST"=\'1\' AND "WD1">=7.4 AND "TUC"<>\'501\'')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_104")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"RTT"<>\'16\' AND "RTT"<>\'501\' AND "RST"=\'1\' AND "WD1"<7.4 AND "WD1">=5.5 AND "TUC"<>\'501\'')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_105")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"RTT"<>\'16\' AND "RTT"<>\'501\' AND "RST"=\'1\' AND "WD1"<5.5 AND "WD1">=3 AND "TUC"<>\'501\'')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_106")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '(("RST"=\'1\' AND "WD1"<3) OR "RST"=\'2\') AND "TUC"<>\'501\'')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_107")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"RST"=\'6\' ')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_108")
+
+arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"TUC"=\'501\' ')
+arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_018")
+
+arcpy.Delete_management('Szosa_droga_L')
+
+
+
+
+
+
 
 
