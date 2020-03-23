@@ -15,6 +15,15 @@ for dirpath, dirnames, filenames in walk:
         print filename
 mxd.save()
 
+# zapisuje w shp
+arcpy.Dissolve_management("ZL_101","D:\mgr\mgrA") # Agreguje warstw? w oparciu o okre?lone atrybuty.
+arcpy.Integrate_management("Szosa_droga_L",15)     #integralno?ci wsp?lnych granic element?w znjaduj?cej sie w odleglosci 15
+arcpy.MakeFeatureLayer_management('Budynek_A_AAL015', 'Budynek_A_layer')
+
+arcpy.Dissolve_management("ZL_103","D:\mgr\103")
+arcpy.Integrate_management("Szosa_droga_L",15)
+
+
 arcpy.ApplySymbologyFromLayer_management("Rzeka_strum_L",r'D:\mgr\Gitmgr\mgr\symbole\Rzeka_L.lyr')
 arcpy.ApplySymbologyFromLayer_management("Budynek_P_layer","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
 
@@ -26,6 +35,9 @@ arcpy.ApplySymbologyFromLayer_management("ZL_105","D:\mgr\Gitmgr\mgr\symbole\Szo
 arcpy.ApplySymbologyFromLayer_management("ZL_106","D:\mgr\Gitmgr\mgr\symbole\Szosa_106.lyr")
 arcpy.ApplySymbologyFromLayer_management("ZL_107","D:\mgr\Gitmgr\mgr\symbole\Szosa_107.lyr")
 arcpy.ApplySymbologyFromLayer_management("ZL_108","D:\mgr\Gitmgr\mgr\symbole\Szosa_108.lyr")
+
+
+
 
 mxd.save()
 
@@ -55,3 +67,33 @@ def nearRoutine():
 
 #wywo?uje procedur? rekurencyjn?. B?dzie dzia?a? stopniowo szybciej, poniewa? za ka?dym razem b?dzie przechodzi? przez mniejsz? liczb? punkt?w
 nearRoutine()
+
+
+
+import arcpy
+
+line_lyr = "szosa_droga"
+pt_lyr =  "bud"
+interval = 50
+
+
+insertCursor = arcpy.da.InsertCursor("bud", ["SHAPE@XY"]) # this is the pre-existing pt feature class
+
+with arcpy.da.SearchCursor(line_lyr, ['OID@','SHAPE@','FID']) as searchCursor: # this is the line feature on which the points will be based
+    for row in searchCursor:
+        lengthLine = round(row[1].length) # grab the length of the line feature, i'm using round() here to avoid weird rounding errors that prevent the numberOfPositions from being determined
+        if int(lengthLine % interval) == 0:
+            numberOfPositions = int(lengthLine // interval) - 1
+        else:
+            numberOfPositions = int(lengthLine // interval)
+
+        if numberOfPositions > 0: # > 0 b/c we don't want to add a point to a line feature that is less than our interval
+            for i in range(numberOfPositions): # using range, allows us to not have to worry about
+                distance = (i + 1) * interval
+                xPoint = row[1].positionAlongLine(distance).firstPoint.X
+                yPoint = row[1].positionAlongLine(distance).firstPoint.Y
+                xy = (xPoint, yPoint)
+                insertCursor.insertRow([xy])
+
+
+ResolveRoadConflicts_cartography

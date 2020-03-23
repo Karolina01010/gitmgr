@@ -196,6 +196,8 @@ arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_108")
 arcpy.SelectLayerByAttribute_management('Szosa_droga_L', "NEW_SELECTION", '"TUC"=\'501\' ')
 arcpy.CopyFeatures_management('Szosa_droga_L',"ZL_018")
 
+
+
 arcpy.Delete_management('Szosa_droga_L')
 
 
