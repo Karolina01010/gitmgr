@@ -18,7 +18,16 @@ mxd.save()
 # zapisuje w shp
 arcpy.Dissolve_management("ZL_101","D:\mgr\mgrA") # Agreguje warstw? w oparciu o okre?lone atrybuty.
 arcpy.Integrate_management("Szosa_droga_L",15)     #integralno?ci wsp?lnych granic element?w znjaduj?cej sie w odleglosci 15
-arcpy.MakeFeatureLayer_management('Budynek_A_AAL015', 'Budynek_A_layer')
+#arcpy.MakeFeatureLayer_management('Budynek_A_AAL015', 'Budynek_A_layer') - najprawdopodobnije nie potrzebne
+
+arcpy.Dissolve_management("ZL_103","D:\mgr\Droga\ZL_103A.shp") # Agreguje warstw? w oparciu o okre?lone atrybuty.
+arcpy.Integrate_management("ZL_103A",15)
+arcpy.ApplySymbologyFromLayer_management("ZL_103A","D:\mgr\Gitmgr\mgr\symbole\Szosa_103.lyr")
+
+arcpy.Integrate_management("ZL_104",20)
+arcpy.Dissolve_management("ZL_104","D:\mgr\Droga\ZL_104.shp")  # w odwrtonej kolejnosci ze wzgledu na to ze linie sie ?acza i wychodzi przerwa w odwrotnej kolejnosci ze wzhledu na b?edne ?aczenie serpentyn an drodze
+
+
 
 arcpy.Dissolve_management("ZL_103","D:\mgr\103")
 arcpy.Integrate_management("Szosa_droga_L",15)
@@ -37,7 +46,7 @@ arcpy.ApplySymbologyFromLayer_management("ZL_107","D:\mgr\Gitmgr\mgr\symbole\Szo
 arcpy.ApplySymbologyFromLayer_management("ZL_108","D:\mgr\Gitmgr\mgr\symbole\Szosa_108.lyr")
 
 
-
+arcpy.ResolveBuildingConflicts("bud","HGT","mgrA")
 
 mxd.save()
 
@@ -97,3 +106,4 @@ with arcpy.da.SearchCursor(line_lyr, ['OID@','SHAPE@','FID']) as searchCursor: #
 
 
 ResolveRoadConflicts_cartography
+arcpy.ResolveBuildingConflicts
