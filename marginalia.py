@@ -3,8 +3,8 @@ import arcpy
 
 #myMap ="D:\mgr\MGR.mxd"
 arcpy.env.addOutputsToMap = True
-mxd = arcpy.mapping.MapDocument(r"D:\mgr\Gitmgr\mgr\mxdd.mxd") # dzia?anie na otwartym pliku mxd ("CURRENT")
-workspace = r"D:\mgr\Baza100.gdb"                    # definiujemy ta baze
+mxd = arcpy.mapping.MapDocument(r"D:\mgr\M33033CD\NOWY.mxd") # dzia?anie na otwartym pliku mxd ("CURRENT")
+workspace = r"D:\mgr\M33033CD\BAZA_M33033.gdb"                    # definiujemy ta baze
 df = arcpy.mapping.ListDataFrames(mxd, "*")[0]
 df.scale = 100000
 
@@ -13,6 +13,21 @@ for dirpath, dirnames, filenames in walk:
     for filename in filenames:
         arcpy.mapping.AddLayer(df, arcpy.mapping.Layer(os.path.join(dirpath, filename)))
         print filename
+mxd.save()
+
+
+arcpy.ApplySymbologyFromLayer_management("Rzeka_strum_L",r'D:\mgr\Gitmgr\mgr\symbole\Rzeka_L.lyr')
+arcpy.ApplySymbologyFromLayer_management("Budynek_P","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
+arcpy.ApplySymbologyFromLayer_management("Budynek_PP","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
+
+arcpy.ApplySymbologyFromLayer_management("ZL_018","D:\mgr\Gitmgr\mgr\symbole\Szosa_018.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_101","D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_103","D:\mgr\Gitmgr\mgr\symbole\Szosa_103.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_104","D:\mgr\Gitmgr\mgr\symbole\Szosa_104.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_105","D:\mgr\Gitmgr\mgr\symbole\Szosa_105.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_106","D:\mgr\Gitmgr\mgr\symbole\Szosa_106.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_107","D:\mgr\Gitmgr\mgr\symbole\Szosa_107.lyr")
+arcpy.ApplySymbologyFromLayer_management("ZL_108","D:\mgr\Gitmgr\mgr\symbole\Szosa_108.lyr")
 mxd.save()
 
 # zapisuje w shp
@@ -32,18 +47,10 @@ arcpy.Dissolve_management("ZL_104","D:\mgr\Droga\ZL_104.shp")  # w odwrtonej kol
 arcpy.Dissolve_management("ZL_103","D:\mgr\103")
 arcpy.Integrate_management("Szosa_droga_L",15)
 
+arcpy.ResolveRoadConflicts_cartography("101;105","Id","D:\mgr\mgr.gdb")
 
-arcpy.ApplySymbologyFromLayer_management("Rzeka_strum_L",r'D:\mgr\Gitmgr\mgr\symbole\Rzeka_L.lyr')
-arcpy.ApplySymbologyFromLayer_management("Budynek_P_layer","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
 
-arcpy.ApplySymbologyFromLayer_management("ZL_018","D:\mgr\Gitmgr\mgr\symbole\Szosa_018.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_101","D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_103","D:\mgr\Gitmgr\mgr\symbole\Szosa_103.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_104","D:\mgr\Gitmgr\mgr\symbole\Szosa_104.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_105","D:\mgr\Gitmgr\mgr\symbole\Szosa_105.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_106","D:\mgr\Gitmgr\mgr\symbole\Szosa_106.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_107","D:\mgr\Gitmgr\mgr\symbole\Szosa_107.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_108","D:\mgr\Gitmgr\mgr\symbole\Szosa_108.lyr")
+
 
 
 arcpy.ResolveBuildingConflicts("bud","HGT","mgrA")
