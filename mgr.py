@@ -135,26 +135,26 @@ arcpy.FeatureClassToFeatureClass_conversion('Drzewo_P_layer', dane_wyjsc, 'Drzew
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'27\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_kol_P")
-
+arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'50\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Kosciol_swiatynia_P")
-
+arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'54\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Stacja_benz_P")
-
+arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'601\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Przystanek")
-
+arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 
 arcpy.SelectLayerByAttribute_management('Budynek_P_layer', "NEW_SELECTION", '"BFC" = \'7\' ')
 arcpy.CopyFeatures_management('Budynek_P_layer',"Obiekt_kut_P")
+arcpy.DeleteFeatures_management('Budynek_P_layer')
 
 arcpy.FeatureClassToFeatureClass_conversion('Budynek_P_layer', dane_wyjsc, 'Budynek_P')
-
 
 # Podzia? drogi na klasy
 

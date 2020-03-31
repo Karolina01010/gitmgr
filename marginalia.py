@@ -3,8 +3,16 @@ import arcpy
 
 #myMap ="D:\mgr\MGR.mxd"
 arcpy.env.addOutputsToMap = True
-mxd = arcpy.mapping.MapDocument(r"D:\mgr\M33033CD\NOWY.mxd") # dzia?anie na otwartym pliku mxd ("CURRENT")
+mxd = arcpy.mapping.MapDocument(r"D:\mgr\M33033CD\DROGI.mxd") # dzia?anie na otwartym pliku mxd ("CURRENT")
 workspace = r"D:\mgr\M33033CD\BAZA_M33033.gdb"                    # definiujemy ta baze
+arcpy.env.workspace = workspace
+
+#GENERALIZACJA DROG
+arcpy.Dissolve_management("ZL_101","D:\mgr\M33033CD\droga\ZL101.shp","","","","UNSPLIT_LINES") # Agreguje warstw? w oparciu o okre?lone atrybuty.
+#arcpy.MakeFeatureLayer_management("D:\mgr\M33033CD\droga\ZL101.shp", 'ZL101')                      # tworzy warstwe w layers
+arcpy.Integrate_management("ZL101",20)     #integralno?ci wsp?lnych granic element?w znjaduj?cej sie w odleglosci 15
+arcpy.ApplySymbologyFromLayer_management("ZL101","D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")
+
 df = arcpy.mapping.ListDataFrames(mxd, "*")[0]
 df.scale = 100000
 
@@ -15,13 +23,20 @@ for dirpath, dirnames, filenames in walk:
         print filename
 mxd.save()
 
+# zapisuje w shp
+arcpy.Dissolve_management("ZL_101","D:\mgr\M33033CD\droga\ZL101.shp") # Agreguje warstw? w oparciu o okre?lone atrybuty.
+arcpy.Integrate_management("D:\mgr\M33033CD\droga\ZL101.shp",50)     #integralno?ci wsp?lnych granic element?w znjaduj?cej sie w odleglosci 15
+#arcpy.MakeFeatureLayer_management('Budynek_A_AAL015', 'Budynek_A_layer') - najprawdopodobnije nie potrzebne
+arcpy.ApplySymbologyFromLayer_management("ZL_101","D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")
+
+
 
 arcpy.ApplySymbologyFromLayer_management("Rzeka_strum_L",r'D:\mgr\Gitmgr\mgr\symbole\Rzeka_L.lyr')
 arcpy.ApplySymbologyFromLayer_management("Budynek_P","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
 arcpy.ApplySymbologyFromLayer_management("Budynek_PP","D:\mgr\Gitmgr\mgr\symbole\Budynek_P.lyr")
 
 arcpy.ApplySymbologyFromLayer_management("ZL_018","D:\mgr\Gitmgr\mgr\symbole\Szosa_018.lyr")
-arcpy.ApplySymbologyFromLayer_management("ZL_101","D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")
+
 arcpy.ApplySymbologyFromLayer_management("ZL_103","D:\mgr\Gitmgr\mgr\symbole\Szosa_103.lyr")
 arcpy.ApplySymbologyFromLayer_management("ZL_104","D:\mgr\Gitmgr\mgr\symbole\Szosa_104.lyr")
 arcpy.ApplySymbologyFromLayer_management("ZL_105","D:\mgr\Gitmgr\mgr\symbole\Szosa_105.lyr")
@@ -42,7 +57,7 @@ arcpy.ApplySymbologyFromLayer_management("ZL_103A","D:\mgr\Gitmgr\mgr\symbole\Sz
 arcpy.Integrate_management("ZL_104",20)
 arcpy.Dissolve_management("ZL_104","D:\mgr\Droga\ZL_104.shp")  # w odwrtonej kolejnosci ze wzgledu na to ze linie sie ?acza i wychodzi przerwa w odwrotnej kolejnosci ze wzhledu na b?edne ?aczenie serpentyn an drodze
 
-
+arcpy.Dissolve_management("ZL_101","D:\mgr\M33033CD\droga\droga101.shp","","","","UNSPLIT_LINES")
 
 arcpy.Dissolve_management("ZL_103","D:\mgr\103")
 arcpy.Integrate_management("Szosa_droga_L",15)
@@ -50,7 +65,7 @@ arcpy.Integrate_management("Szosa_droga_L",15)
 arcpy.ResolveRoadConflicts_cartography("101;105","Id","D:\mgr\mgr.gdb")
 
 
-
+arcpy.Dissolve_management("droga_101","D:\mgr\M33033CD\droga\ZL_101.shp","","","","UNSPLIT_LINES")
 
 
 arcpy.ResolveBuildingConflicts("bud","HGT","mgrA")
