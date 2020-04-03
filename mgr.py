@@ -59,7 +59,7 @@ arcpy.MakeFeatureLayer_management('Rezerwat_pr_AAL005', 'Rezerwat_pr_A_layer')
 
 #DODATKOWE
 #Definiuje uk?ad wspolrzednych
-#arcpy.env.outputCoordinateSystem = arcpy.SpatialReference("ETRS 1989 UTM Zone 33N")
+arcpy.env.outputCoordinateSystem = arcpy.SpatialReference("ETRS 1989 UTM Zone 33N")
 
 #5
 #Selekcjonuje obiekty ktore nastepnie sa zamieniane na punktowe

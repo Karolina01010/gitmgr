@@ -9,9 +9,10 @@ arcpy.env.workspace = workspace
 
 #GENERALIZACJA DROG
 arcpy.Dissolve_management("ZL_101","D:\mgr\M33033CD\droga\ZL101.shp","","","","UNSPLIT_LINES") # Agreguje warstw? w oparciu o okre?lone atrybuty.
-#arcpy.MakeFeatureLayer_management("D:\mgr\M33033CD\droga\ZL101.shp", 'ZL101')                      # tworzy warstwe w layers
-arcpy.Integrate_management("ZL101",20)     #integralno?ci wsp?lnych granic element?w znjaduj?cej sie w odleglosci 15
-arcpy.ApplySymbologyFromLayer_management("ZL101","D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")
+arcpy.Integrate_management("D:\mgr\M33033CD\droga\ZL101.shp",20)     #integralno?ci wsp?lnych granic element?w znjaduj?cej sie w odleglosci 15
+arcpy.MakeFeatureLayer_management("D:\mgr\M33033CD\droga\ZL101.shp",'ZL101')                      # tworzy warstwe w layers
+arcpy.ApplySymbologyFromLayer_management('ZL101',"D:\mgr\Gitmgr\mgr\symbole\Szosa_101.lyr")       # nadaje symbole
+arcpy.Delete_management('ZL_101')
 
 df = arcpy.mapping.ListDataFrames(mxd, "*")[0]
 df.scale = 100000
@@ -78,7 +79,7 @@ mxd.save()
 
 #arcpy.cartography.SimplifyLine("rzeka","rzeka1","POINT_REMOVE",10)
 
-feature = r"D:\mgr\mgr.gdb\bud"
+feature = r"D:\mgr\M33033CD\BAZA_M33033.gdb\bud"
 
 def nearRoutine():
     #coblicza odleglosc
@@ -129,3 +130,71 @@ with arcpy.da.SearchCursor(line_lyr, ['OID@','SHAPE@','FID']) as searchCursor: #
 
 ResolveRoadConflicts_cartography
 arcpy.ResolveBuildingConflicts
+
+
+
+ODSUWA POWIERZCHNIE OD LINII
+
+import arcpy,math
+
+polygon_fc=r'D:\mgr\M33033CD\BAZA_M33033.gdb\bud'
+line_fc=r'D:\mgr\M33033CD\BAZA_M33033.gdb\szosa_droga'
+#Output, change path (and fc name if you want)
+output_polygon_fc=r'C:\TEST.gdb\Sample_points_buffer_near'
+#Desired distance from polygon centroids to nearest line. Change
+desired_distance=30
+
+temp_points=r'in_memory\points'
+
+def bearing_to_radians(bearing):
+    return math.radians((450-bearing)%360)
+
+#Tworzy punkt srodkowy wielok?ta, calculate near distance and angle and join this to polygons
+arcpy.FeatureToPoint_management(in_features=polygon_fc, out_feature_class=temp_points)
+arcpy.Near_analysis(in_features=temp_points, near_features=line_fc,location=True, angle=True, method='PLANAR')
+arcpy.MakeFeatureLayer_management(in_features=polygon_fc, out_layer='polygon_lyr')
+arcpy.AddJoin_management(in_layer_or_view='polygon_lyr', in_field='OBJECTID', join_table=temp_points,
+                        join_field='OBJECTID')
+arcpy.CopyFeatures_management(in_features='polygon_lyr', out_feature_class=output_polygon_fc)
+
+#Move the polygons
+with arcpy.da.UpdateCursor(output_polygon_fc,['SHAPE@X','SHAPE@Y','points_NEAR_DIST','points_NEAR_ANGLE']) as cursor:
+    for row in cursor:
+        newx=row[0]+(row[2]-desired_distance)*math.sin(bearing_to_radians(row[3]))
+        newy=row[1]+(row[2]-desired_distance)*math.cos(bearing_to_radians(row[3]))
+        row[0]=newx
+        row[1]=newy
+        cursor.updateRow(row)
+
+
+
+import arcpy,math
+
+budynek=r'D:\mgr\M33033CD\BAZA_M33033.gdb\budA'
+line=r'D:\mgr\M33033CD\BAZA_M33033.gdb\szosa_droga'
+#Output, change path (and fc name if you want)
+nowypoligon=r'D:\mgr\M33033CD\BAZA_M33033.gdb\Sample_points_buffer_near'
+#Desired distance from polygon centroids to nearest line. Change
+desired_distance=30
+
+temp_points=r'in_memory\points'
+
+def bearing_to_radians(bearing):
+    return math.radians((450-bearing)%360)
+
+#Tworzy punkt srodkowy wielok?ta, calculate near distance and angle and join this to polygons
+arcpy.FeatureToPoint_management('budynek','temp_points')   #Tworzy klas? obiekt?w zawieraj?c? punkty wygenerowane z reprezentatywnych lokalizacji obiekt?w wej?ciowych.
+arcpy.Near_analysis('temp_points', 'line')    # Oblicza odleg?o?? i k?t  mi?dzy obiektami wej?ciowymi a najbli?szymi obiektami w innej warstwie lub klasie obiekt?w.
+arcpy.MakeFeatureLayer_management('budynek','polygon_lyr')   #Tworzy warstw? obiekt?w z wej?ciowej klasy obiekt?w lub pliku warstwy.
+arcpy.AddJoin_management('polygon_lyr','OBJECTID', 'temp_points', 'OBJECTID')  #??czy warstw? z inn? warstw? lub tabel? na podstawie wsp?lnego pola (dodaje do nowej warstwy  Budynek A informacje o odleg?osci do najblizszej drogi "NEAR_DIST"  z warstwy punktowej )
+arcpy.CopyFeatures_management('polygon_lyr','nowypoligon') #Kopiuje obiekty z wej?ciowej klasy obiekt?w lub warstwy do nowej klasy obiekt?w.
+
+#Move the polygons
+with arcpy.da.UpdateCursor(nowypoligon,['SHAPE@X','SHAPE@Y','NEAR_DIST','NEAR_ANGLE']) as cursor:
+    for row in cursor:
+        newx=row[0]+(row[2]-desired_distance)*math.sin(bearing_to_radians(row[3]))
+        newy=row[1]+(row[2]-desired_distance)*math.cos(bearing_to_radians(row[3]))
+        row[0]=newx
+        row[1]=newy
+        cursor.updateRow(row)
+
